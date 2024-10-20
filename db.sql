@@ -3,78 +3,85 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 -- Drop existing tables if they exist (for re-running the script)
-DROP TABLE IF EXISTS user_details, admin_details, doctor_details, patient_details;
+DROP TABLE IF EXISTS admin_details, doctor_details, patient_details, department;
 
--- Create user_details table
-CREATE TABLE user_details(
-    user_id INT AUTO_INCREMENT,
-    name VARCHAR(55) NOT NULL,
-    email VARCHAR(95) NOT NULL UNIQUE,
-    phone_no VARCHAR(11),
-    address VARCHAR(155),
-    gender VARCHAR(10),
-    role VARCHAR(10) NOT NULL,
-    password VARCHAR(155),
-    PRIMARY KEY(user_id)
-);
-
--- Create admin table
+-- 1. Create admin table
 CREATE TABLE admin_details(
-    id INT AUTO_INCREMENT,
-    name varchar(50),
-    email varchar(80),
-    password varchar(150),
-    PRIMARY KEY(id)
+    admin_id INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(80) NOT NULL,
+    password VARCHAR(150) NOT NULL,
+    role VARCHAR(10) NOT NULL,
+    PRIMARY KEY(admin_id)
 );
 
--- Insert into user_details
-INSERT INTO admin_details
-(name, email, password)
+-- Insert into admin_details
+INSERT INTO admin_details (name, email, password, role)
 VALUES
-('Md Abu Bokar', 'abu@gmail.com', 'testpass1'),
-('Natsha Monir Shawon', 'nat@gmail.com', 'testpass2');
+('Md Abu Bokar', 'abu@gmail.com', 'testpass1', 'admin'),
+('Natsha Monir Shawon', 'nat@gmail.com', 'testpass2', 'admin');
 
--- Create doctor table
+-- 2. Create department table
+CREATE TABLE department(
+    dept_id INT AUTO_INCREMENT NOT NULL,
+    dept_name VARCHAR(55) NOT NULL,
+    PRIMARY KEY(dept_id)
+);
+
+-- Insert into department
+INSERT INTO department (dept_name)
+VALUES
+('Opthalmology'),
+('Cardiology');
+
+-- 3. Create doctor table
 CREATE TABLE doctor_details(
-    user_id INT UNIQUE,
+    doctor_id INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(80) UNIQUE NOT NULL,
+    phone_no VARCHAR(15) UNIQUE NOT NULL,
+    address VARCHAR(150),
+    password VARCHAR(150) NOT NULL,
+    gender VARCHAR(10),
     speciality VARCHAR(55) NOT NULL,
-    PRIMARY KEY(user_id),
-    FOREIGN KEY(user_id) REFERENCES user_details(user_id) ON DELETE CASCADE
+    dept_id INT NOT NULL,
+    role VARCHAR(10) NOT NULL,
+    PRIMARY KEY(doctor_id),
+    FOREIGN KEY(dept_id) REFERENCES department(dept_id)
 );
 
--- Insert into doctor
-INSERT INTO doctor_details
-(user_id, speciality)
+-- Insert into doctor_details
+INSERT INTO doctor_details (name, email, phone_no, address, password, gender, speciality, dept_id, role)
 VALUES
-(2, 'Ophthalmologist');
+('Olivia Williams', 'olivia.williams@example.com', '31234567890', '789 Pine St, Springfield', 'mySecurePass456', 'Female', 'Opthalmologist', 1, 'doctor'),
+('Ava Brown', 'ava.brown@example.com', '41234567890', '101 Birch St, Springfield', 'pass@Brown987', 'Female', 'Cardiologist', 2, 'doctor');
 
---Create patient table
+-- 4. Create patient table
 CREATE TABLE patient_details(
-	id INT AUTO_INCREMENT,
-    name varchar(50),
-    email varchar(80) UNIQUE,
-    phone_no INT(11) UNIQUE,
-    address varchar(150),
-    password varchar(150),
-    blood_group varchar(5),
-    dob varchar(10),
-    height double(3,2),
-    wight double(3,2),
-    occupation varchar(50),
-    guadian_name varchar(50),
-    guardian_phone INT(11),
-    PRIMARY KEY(id)
+    patient_id INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(80) UNIQUE NOT NULL,
+    phone_no VARCHAR(15) UNIQUE NOT NULL,
+    address VARCHAR(150),
+    password VARCHAR(150) NOT NULL,
+    gender VARCHAR(10),
+    blood_group VARCHAR(5),
+    dob VARCHAR(10),
+    height DOUBLE(3,2),
+    weight DOUBLE(3,2),
+    occupation VARCHAR(50),
+    guardian_name VARCHAR(50),
+    guardian_phone VARCHAR(15),
+    role VARCHAR(10) NOT NULL,
+    PRIMARY KEY(patient_id)
 );
 
---Insert into patient
+-- Insert into patient_details
 INSERT INTO patient_details 
-(name, email, phone_no, address, password, blood_group, dob, height, wight, occupation, guadian_name, guardian_phone) 
+(name, email, phone_no, address, password, gender, blood_group, dob, height, weight, occupation, guardian_name, guardian_phone, role)
 VALUES
-('Emily Parker', 'emily.parker@example.com', 91234567890, '123 Maple St, Springfield', 'p@ssw0rd123', 'O+', '1990-05-12', 1.65, 55.50, 'Teacher', 'John Parker', 12345678901),
-('Sophia Johnson', 'sophia.j@example.com', 92345678901, '456 Oak St, Springfield', 'abc123DEF!', 'A+', '1985-08-20', 1.70, 60.00, 'Software Engineer', 'Maria Johnson', 12345678902),
-('Olivia Williams', 'olivia.williams@example.com', 93456789012, '789 Pine St, Springfield', 'mySecurePass456', 'B-', '1992-02-14', 1.60, 50.75, 'Nurse', 'Ethan Williams', 12345678903),
-('Ava Brown', 'ava.brown@example.com', 94567890123, '101 Birch St, Springfield', 'pass@Brown987', 'AB+', '1988-11-25', 1.55, 58.20, 'Artist', 'Henry Brown', 12345678904),
-('Isabella Davis', 'isabella.davis@example.com', 95678901234, '234 Cedar St, Springfield', 'dav!sSecure890', 'O-', '1995-03-07', 1.68, 62.35, 'Architect', 'Laura Davis', 12345678905);
-
+('Emily Parker', 'emily.parker@example.com', '91234567890', '123 Maple St, Springfield', 'p@ssw0rd123', 'Female', 'O+', '1990-05-12', 1.65, 55.50, 'Teacher', 'John Parker', '12345678901', 'patient'),
+('Sophia Johnson', 'sophia.j@example.com', '92345678901', '456 Oak St, Springfield', 'abc123DEF!', 'Female', 'A+', '1985-08-20', 1.70, 60.00, 'Software Engineer', 'Maria Johnson', '12345678902', 'patient'),
+('Isabella Davis', 'isabella.davis@example.com', '95678901234', '234 Cedar St, Springfield', 'dav!sSecure890', 'Female', 'O-', '1995-03-07', 1.68, 62.35, 'Architect', 'Laura Davis', '12345678905', 'patient');
 
 COMMIT;

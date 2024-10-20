@@ -20,15 +20,20 @@ export const Sidebar = () => {
   };
 
   const routes = bData.filter((b) => {
-    if(role === "Admin"){
+    if (role === "admin") {
       return true;
-    } else if(role === "Patient") {
-      return b.title === "Dashboard" || b.title === "Doctor"
+    } else if (role === "doctor") {
+      return (
+        b.title === "Dashboard" ||
+        b.title === "Appointments" ||
+        b.title === "Department"
+      );
+    } else if (role === "patient") {
+      return b.title === "Dashboard" || b.title === "Doctor";
     } else {
-      return b.title === "Dashboard" || b.title === "Appointments" || b.title === "Department";
+      return false;
     }
-    return false;
-  })
+  });
 
   return (
     <div className="text-white w-[350px] h-[100vh] top-0 sticky bg-[#009BA9]">

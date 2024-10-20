@@ -30,7 +30,7 @@ export const Profile = () => {
             to="/editprofile"
             className="flex items-center gap-2 cursor-pointer"
           >
-            <img src="img/editprofile.png" alt="settings" />
+            <img src="img/settings.png" alt="settings" />
             Edit Profile
           </Link>
           <div

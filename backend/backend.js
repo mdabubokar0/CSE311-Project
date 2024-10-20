@@ -38,9 +38,9 @@ app.post("/register", (req, res) => {
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  const sql = 'SELECT * FROM user_details WHERE email = ?';
+  const sql = 'SELECT admin_id AS user_id, name, email, password, role FROM admin_details WHERE email = ? UNION ALL SELECT doctor_id AS user_id, name, email, password, role FROM doctor_details WHERE email = ? UNION ALL SELECT patient_id AS user_id, name, email, password, role FROM patient_details WHERE email = ?';
 
-  db.query(sql, [email], (err, results) => {
+  db.query(sql, [email, email, email], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Database error' });
     }

@@ -16,8 +16,8 @@
   },
   {
     "id": 4,
-    "title": "Nurses",
-    "link": "/nurse"
+    "title": "Tests",
+    "link": "/test"
   },
   {
     "id": 5,
@@ -26,7 +26,27 @@
   },
   {
     "id": 6,
-    "title": "Departments",
+    "title": "Department",
     "link": "/department"
+  },
+  {
+    "id": 7,
+    "title": "Billings",
+    "link": "/billing"
+  },
+  {
+    "id": 8,
+    "title": "Treatments",
+    "link": "/treatment"
+  },
+  {
+    "id": 9,
+    "title": "Admissions",
+    "link": "/admission"
+  },
+  {
+    "id": 10,
+    "title": "Prescriptions",
+    "link": "/prescription"
   }
 ]
